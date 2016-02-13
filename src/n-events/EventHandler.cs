@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace N.Package.Events
 {
     /// A high level event handler
-    public class Events : IEventListener, ITrigger
+    public class EventHandler : IEventListener, ITrigger
     {
         /// Various event handler groups
         private SimpleCollection simple = new SimpleCollection();

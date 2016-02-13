@@ -44,7 +44,7 @@ namespace N.Package.Events
         private Timer timer;
 
         /// The events queue to use; if omitted defaults to the timer one
-        private Events events;
+        private EventHandler events;
 
         /// Create an instance
         /// @param timer The Timer instance to use.
@@ -56,7 +56,8 @@ namespace N.Package.Events
 
         /// Create an instance
         /// @param timer The Timer instance to use.
-        public Actions(Timer timer, Events events)
+        /// @param events The event handler to use if not the timer one.
+        public Actions(Timer timer, EventHandler events)
         {
             this.timer = timer;
             this.events = events;

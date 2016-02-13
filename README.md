@@ -6,7 +6,7 @@ This is an unexciting but robust event handler and action system for Unity3d.
 
 Basic usage of this module revolves around the three core classes:
 
-- `Events` is a generic event handler.
+- `EventHandler` is a generic event handler.
 - `Timer` is a suspendable replacement for Time for tests and gameplay.
 - `Actions` is a high level interface for running and dispatching actions.
 

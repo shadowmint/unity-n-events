@@ -16,8 +16,8 @@ namespace N.Package.Events
     public class Timer
     {
         /// Event handler for on-update events
-        private Events events = new Events();
-        public Events Events { get { return events; } }
+        private EventHandler events = new EventHandler();
+        public EventHandler Events { get { return events; } }
 
         /// The last frame we updated on
         private int frameIndex = 0;

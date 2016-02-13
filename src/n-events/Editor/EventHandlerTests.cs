@@ -3,7 +3,7 @@ using NUnit.Framework;
 using System.Linq;
 using N.Package.Events;
 
-public class EventsTest : N.Tests.Test
+public class EventHandlerTest : N.Tests.Test
 {
     private class TestEventA : IEvent
     { public IEventApi Api { get; set; } }
@@ -14,7 +14,7 @@ public class EventsTest : N.Tests.Test
     [Test]
     public void test_repeating_event()
     {
-        var instance = new Events();
+        var instance = new EventHandler();
         var count = 0;
         instance.AddEventHandler<TestEventA>((ep) => { count += 1; });
         instance.Trigger(new TestEventA());
@@ -24,7 +24,7 @@ public class EventsTest : N.Tests.Test
     [Test]
     public void test_trigger_event_removal()
     {
-        var instance = new Events();
+        var instance = new EventHandler();
         var count = 0;
         EventHandler<TestEventA> handler;
         handler = (ep) =>
@@ -44,7 +44,7 @@ public class EventsTest : N.Tests.Test
     [Test]
     public void test_single_event()
     {
-        var instance = new Events();
+        var instance = new EventHandler();
         var count = 0;
         instance.AddEventHandler<TestEventA>((ep) => { count += 1; }, true);
         instance.Trigger(new TestEventA());
@@ -55,7 +55,7 @@ public class EventsTest : N.Tests.Test
     [Test]
     public void test_deferred_event()
     {
-        var instance = new Events();
+        var instance = new EventHandler();
         var count = 0;
         instance.AddEventHandler<TestEventA>((ep) => { count += 1; }, 1f);
 
@@ -70,7 +70,7 @@ public class EventsTest : N.Tests.Test
     [Test]
     public void test_trigger_deferred_event()
     {
-        var instance = new Events();
+        var instance = new EventHandler();
         var count = 0;
         instance.AddEventHandler<TestEventA>((ep) =>
         {
