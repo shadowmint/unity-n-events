@@ -37,12 +37,6 @@ namespace N.Package.Events
         /// Are we paused?
         private bool paused = false;
 
-        /// Init the timer
-        public Timer()
-        {
-            Resume();
-        }
-
         /// Pause the timer
         public void Pause()
         {
@@ -78,6 +72,12 @@ namespace N.Package.Events
             var rtn = 0f;
             if (!paused)
             {
+                /// On the first instance, update first
+                if (lastTime == 0f)
+                {
+                    Resume();
+                }
+
                 // By default return the same timestamp we used last time.
                 rtn = nextTime;
 
