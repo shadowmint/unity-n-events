@@ -37,6 +37,12 @@ namespace N.Package.Events
         /// Are we paused?
         private bool paused = false;
 
+        /// Init the timer
+        public Timer()
+        {
+            Resume();
+        }
+
         /// Pause the timer
         public void Pause()
         {
