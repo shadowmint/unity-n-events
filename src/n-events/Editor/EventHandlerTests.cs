@@ -11,6 +11,12 @@ public class EventHandlerTest : N.Tests.Test
     private class TestEventB : IEvent
     { public IEventApi Api { get; set; } }
 
+    private class TestEventC : IEvent
+    {
+        public IEventApi Api { get; set; }
+        public EventHandlerTest value;
+    }
+
     [Test]
     public void test_repeating_event()
     {
@@ -50,6 +56,28 @@ public class EventHandlerTest : N.Tests.Test
         instance.Trigger(new TestEventA());
         instance.Trigger(new TestEventA());
         Assert(count == 1);
+    }
+
+    [Test]
+    public void test_persisted_single_event()
+    {
+        var instance = new EventHandler();
+        var count = 0;
+        var done = false;
+        var self = this;
+        instance.AddEventHandler<TestEventC>((ep) =>
+        {
+            if (ep.Is<EventHandlerTest, TestEventC>(self, ep.value))
+            {
+                done = true;
+            }
+            count += 1;
+        }, true);
+        instance.Trigger(new TestEventC() { value = null }); // Persist on not Is()
+        instance.Trigger(new TestEventC() { value = this }); // Match, drop event handler
+        instance.Trigger(new TestEventC() { value = this });
+        Assert(count == 2);
+        Assert(done == true);
     }
 
     [Test]
