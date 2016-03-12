@@ -53,7 +53,13 @@ namespace N.Package.Events
         {
             action.Actions = this;
             action.Timer = this.timer;
-            events.AddEventHandler(then, true);
+            events.AddEventHandler<ActionCompleteEvent>((ep) =>
+            {
+                if (ep.Is(action))
+                {
+                    then(ep);
+                }
+            }, true);
             action.Execute();
         }
 

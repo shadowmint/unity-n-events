@@ -30,11 +30,7 @@ public class TimedActionSequenceTests : N.Tests.Test
         SimpleAction.completed = 0;
 
         // Start~
-        actions.Execute(instance, (ep) =>
-        {
-            if (ep.Is(instance))
-            { done = true; }
-        });
+        actions.Execute(instance, (ep) => { done = true; });
 
         // 0-delay actions are immediately executed
         Assert(SimpleAction.completed == 1);

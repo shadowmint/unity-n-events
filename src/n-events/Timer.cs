@@ -46,11 +46,13 @@ namespace N.Package.Events
         /// On resume, reset the timer
         public void Resume()
         {
-            lastTime = Time.time;
-            thisTime = Time.time;
-            frameIndex = Time.frameCount;
-            forceTime = false;
-            paused = false;
+            if (!forceTime)
+            {
+                lastTime = Time.time;
+                thisTime = Time.time;
+                frameIndex = Time.frameCount;
+                paused = false;
+            }
         }
 
         /// Force the next interval to be step

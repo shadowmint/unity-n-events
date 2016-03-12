@@ -49,25 +49,21 @@ public class ActionsTests : N.Tests.Test
         instance.Execute(task, (ep) =>
         {
             count += 1;
-            if (ep.Is(task))
-            {
-                complete = true;
-            }
+            complete = true;
         });
         Assert(complete == false);
 
         // Run some other action
-        // Notice how all ActionCompleteEvents are passed to the event
-        // handler above, but none of them match the `Is` condition.
+        // Notice how all ActionCompleteEvents are skipped until the matching action.
         instance.Execute<SimpleAction>();
         instance.Execute<SimpleAction>();
         instance.Execute<SimpleAction>();
-        Assert(count == 3);
+        Assert(count == 0);
         Assert(complete == false);
 
         // Now we fake the deferred completion, and correctly catch it
         task.Complete();
-        Assert(count == 4);
+        Assert(count == 1);
         Assert(complete == true);
     }
 }
