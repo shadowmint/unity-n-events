@@ -103,11 +103,11 @@ namespace N.Package.Events
         {
             if (!busy)
             {
-                handlers.RemoveAll(x => x.handler == handler);
+                handlers.RemoveAll(x => x.handler.Equals(handler));
             }
             else
             {
-                var target = handlers.Where(x => x.handler == handler).First();
+                var target = handlers.First(x => x.handler.Equals(handler));
                 if (target != null)
                 {
                     target.expired = true;

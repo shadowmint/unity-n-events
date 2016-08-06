@@ -38,6 +38,7 @@ Library/unity editor resources
 Library/ShaderCache/
 Library/shadercompiler-1.log
 Library/shadercompiler-64bit-*.log
+test/Library/UnityAssemblies
 .DS_Store
 
 node_modules
