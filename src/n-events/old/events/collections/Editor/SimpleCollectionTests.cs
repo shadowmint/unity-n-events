@@ -54,7 +54,7 @@ public class SimpleCollectionTests : N.Tests.Test
 
         instance.AddEventHandler<TestEvent>((ep) => { count += 1; });
 
-        EventHandler<TestEvent> target;
+        EventHandler<TestEvent> target = null;
         target = (ep) =>
         {
             if (count > 2)

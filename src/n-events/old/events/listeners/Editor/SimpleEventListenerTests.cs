@@ -91,7 +91,7 @@ public class SimpleEventListenerTests : N.Tests.Test
             count += 1;
         };
 
-        EventHandler<TestEvent> handler3;
+        EventHandler<TestEvent> handler3 = null;
         handler3 = (ep) =>
         {
             instance.RemoveEventHandler(handler3);

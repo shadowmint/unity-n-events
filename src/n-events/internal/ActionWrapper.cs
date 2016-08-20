@@ -5,16 +5,16 @@ namespace N.Package.Events.Internal
   // Untyped common base to ActionWrapper
   public abstract class ActionWrapper
   {
+    public EventHandler Source { get; set; }
     public abstract bool Is<T>(EventHandler source) where T : class;
     public abstract bool Is<T>(EventHandler source, Action<T> handler) where T : class;
     public abstract bool Is(EventHandler source, Type eventType);
-    public abstract void Dispatch(EventWrapper eventInstance);
+    public abstract void Dispatch<T>(T eventInstance);
   }
 
   // Wrap action types
   class ActionWrapper<T> : ActionWrapper where T : class
   {
-    public EventHandler Source { get; set; }
     public Action<T> Action { get; set; }
 
     public override bool Is<TEvent>(EventHandler source)
@@ -32,9 +32,9 @@ namespace N.Package.Events.Internal
       return Source.Equals(source) && typeof(T) == eventType;
     }
 
-    public override void Dispatch(EventWrapper eventInstance)
+    public override void Dispatch<TEvent>(TEvent eventInstance)
     {
-      Action(eventInstance.As<T>());
+      Action(eventInstance as T);
     }
   }
 }

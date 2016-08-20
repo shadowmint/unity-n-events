@@ -4,36 +4,59 @@ using N.Package.Events.Internal;
 namespace N.Package.Events
 {
   /// EventHandlers are used to subscribe and trigger events.
-  public class EventHandler
+  public class EventHandler : IDisposable
   {
-    private readonly IEventBus _eventBus;
+    private readonly EventStream _eventStream;
 
     public EventHandler()
     {
-      _eventBus = EventManager.Instance.DefaultEventStream;
+      _eventStream = EventStream.Default;
     }
 
-    public EventHandler(IEventBus eventBus)
+    public EventHandler(EventStream eventStream)
     {
-      _eventBus = eventBus;
+      _eventStream = eventStream;
     }
 
     /// Subscribe to an event type
     public void AddEventHandler<T>(Action<T> eventHandler) where T : class
     {
-      _eventBus.Subscribe(this, eventHandler);
+      _eventStream.Subscribe(this, eventHandler);
     }
 
     /// Clear the subscription for an event handler
     public void RemoveEventHandler<T>(Action<T> eventHandler) where T : class
     {
-      _eventBus.Unsubscribe(this, eventHandler);
+      _eventStream.Unsubscribe(this, eventHandler);
+    }
+
+    /// Clear all event handlers of a specific type on an object.
+    public void ClearEventHandlers<T>() where T : class
+    {
+      _eventStream.Clear<T>(this);
     }
 
     /// Trigger an event
     public void Trigger<T>(T eventInstance) where T : class
     {
-      _eventBus.Trigger(this, eventInstance);
+      _eventStream.Trigger(this, eventInstance);
+    }
+
+    /// Trigger an event with an explicit max recursive depth
+    public void Trigger<T>(T eventInstance, int maxChildEvents) where T : class
+    {
+      _eventStream.Trigger(this, eventInstance, maxChildEvents);
+    }
+
+    /// Return the actual event stream
+    public EventStream Stream
+    {
+      get { return _eventStream; }
+    }
+
+    public void Dispose()
+    {
+      _eventStream.Clear(this);
     }
   }
 }

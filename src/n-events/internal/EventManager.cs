@@ -1,77 +1,86 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using N.Package.Events.Internal;
 using UnityEngine;
 
 namespace N.Package.Events.Internal
 {
+  /// A component to process async events.
   public class EventManager : MonoBehaviour
   {
-    [Tooltip("The maximum number of events to allow per frame")]
-    public int MaxEventsPerFrame = 1000;
+    private static EventManager _defaultInstance;
+    private readonly List<StreamContainer> _streams = new List<StreamContainer>();
 
-    private static EventManager _instance;
-
-    /// Set of all event bus instances
-    private readonly List<IEventBus> _eventStream = new List<IEventBus>();
-
-    /// Return the singleton instance.
     public static EventManager Instance
     {
       get
       {
-        if (_instance != null) return _instance;
-
-        var fp = new GameObject();
-        fp.transform.name = "EventManager";
-        _instance = fp.AddComponent<EventManager>();
-        _instance.DefaultEventStream = new EventStream();
-        return _instance;
+        if (_defaultInstance != null) return _defaultInstance;
+        var rp = new GameObject();
+        rp.hideFlags = HideFlags.HideInHierarchy;
+        rp.transform.name = typeof(EventManager).AssemblyQualifiedName;
+        _defaultInstance = rp.AddComponent<EventManager>();
+        return _defaultInstance;
       }
     }
 
-    /// The 'default' event stream for event handlers to use.
-    public IEventBus DefaultEventStream { get; private set; }
-
-    /// Clear the singleton instance.
-    public static void Clear(bool inEditor = false)
+    // Clear the event manager
+    public void Clear(bool inEditor = false)
     {
-      if (_instance == null) return;
+      _streams.ForEach(s => s.OnReleaseStream());
+      _streams.Clear();
+
+      _defaultInstance = null;
+
       if (inEditor)
       {
-        DestroyImmediate(_instance);
+        DestroyImmediate(gameObject);
       }
       else
       {
-        Destroy(_instance);
+        Destroy(gameObject);
       }
-      _instance = null;
     }
 
-    /// Register an event bus
-    public void Register(IEventBus bus)
+    // Register an event stream
+    public void Register(EventStream stream, Action onReleaseStream)
     {
-      _eventStream.Add(bus);
+      _streams.Add(new StreamContainer
+      {
+        Stream = stream,
+        OnReleaseStream = onReleaseStream
+      });
     }
 
-    /// Deregister an event bus
-    public void Deregister(IEventBus bus)
+    // Deregister an event stream
+    public void Deregister(EventStream stream)
     {
-      _eventStream.Remove(bus);
+      _streams.RemoveAll(s => s.Stream.Equals(stream));
     }
 
-    /// Forbid multiple instances
-    public void Start()
-    {
-      if (_instance != null)
-        Destroy(this);
-    }
-
-    /// Flush all events on all event bus instances every frame.
+    // Process pending events
     public void Update()
     {
-      foreach (var bus in _eventStream)
+      Update(Time.deltaTime);
+    }
+
+    // Process pending events
+    public void Update(float delta)
+    {
+      foreach (var stream in _streams)
       {
-        bus.Flush(MaxEventsPerFrame);
+        stream.Stream.Stash.Update(delta);
+        foreach (var item in stream.Stream.Stash.Ready)
+        {
+          stream.Stream.Trigger(item.Source, item.Event);
+        }
       }
     }
+  }
+
+  class StreamContainer
+  {
+    public EventStream Stream { get; set; }
+    public Action OnReleaseStream { get; set; }
   }
 }

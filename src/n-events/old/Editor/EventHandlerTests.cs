@@ -32,7 +32,7 @@ public class EventHandlerTest : N.Tests.Test
     {
         var instance = new EventHandler();
         var count = 0;
-        EventHandler<TestEventA> handler;
+        EventHandler<TestEventA> handler = null;
         handler = (ep) =>
         {
             instance.RemoveEventHandler(handler);
