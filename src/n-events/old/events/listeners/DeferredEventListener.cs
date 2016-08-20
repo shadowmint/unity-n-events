@@ -130,7 +130,7 @@ namespace N.Package.Events.Legacy
         {
             foreach (var item in this.handlers)
             {
-                if (item.handler == callback)
+                if (item.handler.Equals(callback))
                 {
                     return true;
                 }

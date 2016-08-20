@@ -103,11 +103,11 @@ namespace N.Package.Events.Legacy
         {
             if (!busy)
             {
-                handlers.RemoveAll(x => x.handler == handler);
+                handlers.RemoveAll(x => x.handler.Equals(handler));
             }
             else
             {
-                var target = handlers.Where(x => x.handler == handler).First();
+                var target = handlers.First(x => x.handler.Equals(handler));
                 if (target != null)
                 {
                     target.expired = true;
@@ -122,7 +122,7 @@ namespace N.Package.Events.Legacy
         {
             foreach (var item in this.handlers)
             {
-                if (item.handler == callback)
+                if (item.handler.Equals(callback))
                 {
                     return true;
                 }

@@ -1,6 +1,6 @@
 {
   "name": "unity-n-events",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Building blocks for a unity event system",
   "main": "index.js",
   "repository": {
