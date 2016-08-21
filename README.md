@@ -63,8 +63,6 @@ unless they are copied back into the source folder.
 
 To reinstall the files from the src folder, run `npm install ..` again.
 
-This module replaces `N.Events` which is removed in 0.0.3 of n-core.
-
 ### Tests
 
 All tests are wrapped in `#if ...` blocks to prevent test spam.
