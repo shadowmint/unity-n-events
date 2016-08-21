@@ -1,5 +1,6 @@
 ﻿#if N_EVENTS_TESTS
 using System;
+using N.Package.Core.Tests;
 using NUnit.Framework;
 using N.Package.Events.Internal;
 using N.Package.Events;
@@ -9,7 +10,7 @@ using EventHandler = N.Package.Events.EventHandler;
 namespace N.Tests.Events
 {
 
-  public class DeferredEventTests : Test
+  public class DeferredEventTests : TestCase
   {
     [Test]
     public void test_async_event()

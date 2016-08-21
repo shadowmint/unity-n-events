@@ -1,9 +1,10 @@
 #if N_EVENTS_TESTS
 using NUnit.Framework;
 using System.Linq;
+using N.Package.Core.Tests;
 using N.Package.Events.Legacy;
 
-public class ActionsTests : N.Tests.Test
+public class ActionsTests : TestCase
 {
     private class SimpleAction : IAction
     {

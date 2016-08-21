@@ -1,9 +1,10 @@
 #if N_EVENTS_TESTS
 using NUnit.Framework;
 using System.Linq;
+using N.Package.Core.Tests;
 using N.Package.Events.Legacy;
 
-public class EventHandlerTest : N.Tests.Test
+public class EventHandlerTest : TestCase
 {
     private class TestEventA : IEvent
     { public IEventApi Api { get; set; } }

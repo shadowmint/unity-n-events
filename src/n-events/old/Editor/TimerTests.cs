@@ -1,9 +1,10 @@
 #if N_EVENTS_TESTS
+using N.Package.Core.Tests;
 using UnityEngine;
 using NUnit.Framework;
 using N.Package.Events.Legacy;
 
-public class TimerTests : N.Tests.Test
+public class TimerTests : TestCase
 {
     [Test]
     public void test_custom_timer()

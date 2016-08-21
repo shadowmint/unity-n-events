@@ -1,5 +1,6 @@
 #if N_EVENTS_TESTS
 using System;
+using N.Package.Core.Tests;
 using N.Package.Events;
 using NUnit.Framework;
 using N.Package.Events.Internal;
@@ -7,7 +8,7 @@ using EventHandler = N.Package.Events.EventHandler;
 
 namespace N.Tests.Events
 {
-  public class EventHandlerTests : N.Tests.Test
+  public class EventHandlerTests : TestCase
   {
     [Test]
     public void test_trigger_event()

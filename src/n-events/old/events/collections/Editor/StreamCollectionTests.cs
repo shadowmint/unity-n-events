@@ -3,8 +3,9 @@ using NUnit.Framework;
 using System.Linq;
 using N.Package.Events.Legacy;
 using N;
+using N.Package.Core.Tests;
 
-public class StreamedCollectionTests : N.Tests.Test
+public class StreamedCollectionTests : TestCase
 {
     private class TestEvent : IEvent
     {
