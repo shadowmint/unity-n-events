@@ -4,48 +4,37 @@ This is an unexciting but robust event handler and action system for Unity3d.
 
 ## Usage
 
-Basic usage of this module revolves around the three core classes:
-
-- `EventHandler` is a generic event handler.
-- `Timer` is a suspendable replacement for Time for tests and gameplay.
-- `Actions` is a high level interface for running and dispatching actions.
-
-The basic actions usage is to implement `IAction` and then dispatch an instance
-to an `Actions` object:
-
-    private class SimpleAction : IAction
+    class DummyCompletionEvent 
     {
-        public Actions Actions { get; set; }
-        public Timer Timer { get; set; }
+      public bool Complete;
+    }
 
-        public void Execute()
-        {
-            // Do something, then invoke `Complete` to finished.
-            Actions.Complete(this);
-        }
+    class DummyAction
+    {
+      private EventHandler _events = new EventHandler();
+
+      public void Execute()
+      {
+        _events.Trigger(new DummyCompletionEvent { Complete = true });
+        _events.ClearEventHandlers<DummyCompletionEvent>();
+      }
+
+      public DummyAction OnComplete(Action<DummyCompletionEvent> handler)
+      {
+        _events.AddEventHandler(handler);
+        return this;
+      }
     }
 
     ...
+     
+    new DummyAction().OnComplete((ep) => { ... }).Execute();
 
-    myActions.Execute<SimpleAction>();
+The `EventHandler` type is a light weight interface that can be attached to objects
+with relatively low cost.
 
-You can also handle event completion via callbacks:
-
-    var task = new MyAction();
-    instance.Execute(task, (ep) =>
-    {
-        if (ep.Is(task))
-        {
-            // Do something when a specific task is completed.
-            // ...
-        }
-    });
-
-There is some complexity about how event handlers work, see the tests in the
-`Editor/` folder for each class for usage examples.
-
-One thing to note about `Timer` is that it does not update each frame and must
-be manually updated using `Step()` (or `Force()` in tests).
+The extension methods `TriggerDeferred` and `TriggerAsync` support deferred event 
+dispatch for interactive events, etc.
 
 ## Install
 
