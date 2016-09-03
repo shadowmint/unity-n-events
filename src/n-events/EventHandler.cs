@@ -1,5 +1,4 @@
 ﻿using System;
-using N.Package.Events.Internal;
 
 namespace N.Package.Events
 {
@@ -19,9 +18,15 @@ namespace N.Package.Events
     }
 
     /// Subscribe to an event type
-    public void AddEventHandler<T>(Action<T> eventHandler) where T : class
+    public EventBinding<T> AddEventHandler<T>(Action<T> eventHandler) where T : class
     {
-      _eventStream.Subscribe(this, eventHandler);
+      return _eventStream.Subscribe(this, eventHandler);
+    }
+
+    /// Subscribe to an event type, and associate the binding with a context
+    public void AddEventHandler<T>(Action<T> eventHandler, EventContext context) where T : class
+    {
+      context.Add(_eventStream.Subscribe(this, eventHandler));
     }
 
     /// Clear the subscription for an event handler

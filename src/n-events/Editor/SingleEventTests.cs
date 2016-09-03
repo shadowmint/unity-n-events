@@ -59,7 +59,6 @@ namespace N.Tests.Events
       action.OnComplete((ep) =>
       {
         completed2 += 1;
-        
       }).Execute();
 
       Assert(completed1 == 1);

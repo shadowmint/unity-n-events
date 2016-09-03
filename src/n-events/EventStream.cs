@@ -63,7 +63,7 @@ namespace N.Package.Events
     }
 
     /// Subscribe to a new event.
-    public void Subscribe<T>(EventHandler source, Action<T> eventHandler) where T : class
+    public EventBinding<T> Subscribe<T>(EventHandler source, Action<T> eventHandler) where T : class
     {
       if (source == null)
       {
@@ -74,6 +74,7 @@ namespace N.Package.Events
         throw new Exception("Invalid event handler (null)");
       }
       _actions.Add(new ActionWrapper<T> {Action = eventHandler, Source = source});
+      return new EventBinding<T>(source, eventHandler);
     }
 
     /// Remove an event subscription.

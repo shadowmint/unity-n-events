@@ -36,14 +36,13 @@ namespace N.Tests.Events
       {
         count1 += 1;
 
-        Action<EventHandlerTests> handler = null;
-        handler = (ep) =>
+        var context = new EventContext();
+        handler3.AddEventHandler<EventHandlerTests>((ep) =>
         {
           count3 += 1;
-          handler3.RemoveEventHandler(handler);
-        };
+          context.Dispose();
+        }, context);
 
-        handler3.AddEventHandler(handler);
         handler2.Trigger(this);
       });
 
