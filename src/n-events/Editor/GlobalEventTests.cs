@@ -1,4 +1,4 @@
-﻿//#if N_EVENTS_TESTS
+﻿#if N_EVENTS_TESTS
 using System;
 using N.Package.Core.Tests;
 using N.Package.Events;
@@ -165,3 +165,4 @@ namespace N.Tests.Events
     }
   }
 }
+#endif
