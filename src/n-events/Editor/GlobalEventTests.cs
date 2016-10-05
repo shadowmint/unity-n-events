@@ -72,7 +72,7 @@ namespace N.Tests.Events
     // Automatically track event subscription and release when the object is destroyed.
     private readonly EventContext _eventContext = new EventContext();
 
-    public ListensToEventsBehaviour()
+    public void Start()
     {
       GlobalEventStream.Events.AddEventHandler<GlobalEvent>(HandleEvent, _eventContext);
     }
@@ -153,6 +153,7 @@ namespace N.Tests.Events
       GlobalEventStream.Reset();
 
       var instance = this.SpawnComponent<ListensToEventsBehaviour>();
+      instance.Start();
 
       GlobalEventStream.Trigger(new GlobalEvent());
       Assert(instance.EventsHandled == 1);
