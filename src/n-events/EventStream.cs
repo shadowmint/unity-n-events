@@ -162,10 +162,11 @@ namespace N.Package.Events
 
     public void Dispose()
     {
-      if (_isRegistered)
-      {
-        EventManager.Instance.Deregister(this);
-      }
+      if (!_isRegistered) return;
+      EventManager.Instance.Deregister(this);
+      Clear();
+      _stash.Clear();
+      _isRegistered = false;
     }
   }
 }

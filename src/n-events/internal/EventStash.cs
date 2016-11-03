@@ -55,5 +55,10 @@ namespace N.Package.Events.Internal
         }
       }
     }
+
+    public void Clear()
+    {
+      _events.Clear();
+    }
   }
 }
