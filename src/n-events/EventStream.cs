@@ -95,7 +95,7 @@ namespace N.Package.Events
     public void Trigger<T>(EventHandler source, T eventInstance, int maxEventsThreshold) where T : class
     {
       var ownsLock = Lock(maxEventsThreshold);
-      new EventDispatchTransaction<T>(_actions.ToArray()).Execute(source, eventInstance);
+      new EventDispatchTransaction<T>(_actions).Execute(source, eventInstance);
       Unlock(ownsLock);
     }
 
