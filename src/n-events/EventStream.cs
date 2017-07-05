@@ -52,14 +52,32 @@ namespace N.Package.Events
     /// Is this registered with an event manager?
     private bool _isRegistered;
 
+    private int _actionQueueReallocateStashSize = ActionQueue.DefaultReallocateThreshold;
+
+    /// To avoid constant reallocations on fixed size event queues, cache the temporary read buffer for trigger events.
+    private ActionQueue _actionQueue;
+
+    /// Set this value to override the default reallocate threshold.
+    public int ActionQueueReallocateThreshold
+    {
+      get { return _actionQueueReallocateStashSize; }
+      set
+      {
+        _actionQueueReallocateStashSize = value;
+        _actionQueue = new ActionQueue(_actionQueueReallocateStashSize);
+      }
+    }
+
     public EventStream()
     {
       _stash = new EventStash(DefaultMaxStashSize);
+      _actionQueue = new ActionQueue(_actionQueueReallocateStashSize);
     }
 
     public EventStream(int maxStashSize)
     {
       _stash = new EventStash(maxStashSize);
+      _actionQueue = new ActionQueue(_actionQueueReallocateStashSize);
     }
 
     /// Subscribe to a new event.
@@ -95,7 +113,8 @@ namespace N.Package.Events
     public void Trigger<T>(EventHandler source, T eventInstance, int maxEventsThreshold) where T : class
     {
       var ownsLock = Lock(maxEventsThreshold);
-      new EventDispatchTransaction<T>(_actions).Execute(source, eventInstance);
+      _actionQueue.CopyActionList(_actions);
+      DispatchEvents<T>(_actionQueue, source, eventInstance);
       Unlock(ownsLock);
     }
 
@@ -153,10 +172,20 @@ namespace N.Package.Events
     /// Decrement and possibly clear the event lock
     private void Unlock(bool ownsLock)
     {
-      if (ownsLock)
+      if (!ownsLock) return;
+      _locked = false;
+      _eventsSinceLock = 0;
+    }
+
+    private void DispatchEvents<T>(ActionQueue actions, EventHandler source, T eventInstance)
+    {
+      if (actions == null) return;
+      for (var i = 0; i < actions.Length; i++)
       {
-        _locked = false;
-        _eventsSinceLock = 0;
+        if (actions.Actions[i].Is(source, eventInstance.GetType()))
+        {
+          actions.Actions[i].Dispatch(eventInstance);
+        }
       }
     }
 

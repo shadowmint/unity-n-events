@@ -9,7 +9,7 @@ namespace N.Package.Events.Internal
   {
     private readonly Queue<IStashableEvent> _events = new Queue<IStashableEvent>();
 
-    private int _maxStashSize;
+    private readonly int _maxStashSize;
 
     public EventStash(int maxStashSize)
     {
