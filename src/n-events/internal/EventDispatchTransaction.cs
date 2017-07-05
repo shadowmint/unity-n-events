@@ -9,23 +9,21 @@ namespace N.Package.Events.Internal
   /// When a new event arrives, dispatch that event to event listeners using this safe transaction object.
   class EventDispatchTransaction<T>
   {
-    private readonly List<ActionWrapper> _actions;
+    private readonly ActionWrapper[] _actions;
 
     public EventDispatchTransaction(List<ActionWrapper> actions)
     {
-      _actions = actions;
+      _actions = actions.ToArray();
     }
 
     public void Execute(EventHandler source, T eventInstance)
     {
-      if ((_actions != null) && (_actions.Count > 0))
+      if ((_actions == null) || (_actions.Length <= 0)) return;
+      foreach (var action in _actions)
       {
-        for (int i = 0; i < _actions.Count; i++)
+        if (action.Is(source, eventInstance.GetType()))
         {
-          if (_actions[i].Is(source, eventInstance.GetType()))
-          {
-            _actions[i].Dispatch(eventInstance);
-          }
+          action.Dispatch(eventInstance);
         }
       }
     }
