@@ -1,23 +1,30 @@
-var mkdirp = require('mkdirp');
-var path = require('path');
-var ncp = require('ncp');
+let path = require('path');
+let fs = require('fs');
+let copy = require('./copy');
+let folders = require('./folders');
+
+// Exit vars
+let done = false;
 
 // Paths
-var src = path.join(__dirname, '..', 'src');
-var dir = path.join(__dirname, '..', '..', '..', 'Assets', 'packages');
+let root = folders.getInitCwd();
+let src = path.join(__dirname, '..', 'src');
+let pkg = path.join(root, 'Assets', 'packages');
+let isModule = fs.existsSync(path.join(root, 'package.json'));
 
 // Create folder if missing
-mkdirp(dir, function (err) {
-  if (err) {
-    console.error(err)
+if (isModule) {
+  copy.copy(src, pkg).then(() => {
+    done = true;
+  }, (err) => {
+    console.error(err);
     process.exit(1);
-  }
-
-  // Copy files
-  ncp(src, dir, function (err) {
-    if (err) {
-      console.error(err);
-      process.exit(1);
-    }
   });
-});
+} else {
+  console.log('Skip install, not a project: ' + root);
+  done = true;
+}
+
+(function wait() {
+  if (!done) setTimeout(wait, 100);
+})();
