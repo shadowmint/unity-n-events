@@ -45,12 +45,13 @@ Library/UnityAssemblies
 
 node_modules
 Assets/build
-Assets/packages
+Assets/pkg-all
+Assets/pkg-all.meta
 Assets/Plugins
-Assets/packages.meta
 manifest.json
 manifest.json.meta
 .vscode
 Library/CrashedAssetImports.txt
 
 EditorTestResults.xml
+Logs

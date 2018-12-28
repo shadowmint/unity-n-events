@@ -42,5 +42,7 @@ test/Library/UnityAssemblies
 .DS_Store
 
 node_modules
-Assets/packages
+Assets/pkg-all
+Assets/pkg-all.meta
 .idea*
+Log
